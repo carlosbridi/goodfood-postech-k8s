@@ -8,7 +8,7 @@ on:
         default: 'terraform-githubactions'
         type: string
 jobs:
-  provision-ec2:
+  provision-k8s:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
