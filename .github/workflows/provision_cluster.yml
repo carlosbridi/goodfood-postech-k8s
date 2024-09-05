@@ -34,3 +34,23 @@ jobs:
           terraform validate
           terraform plan 
           terraform apply -auto-approve
+
+  kubectl:
+    needs: provision-k8s
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: git@github.com:carlosbridi/goodfood-postech.git
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Install Kubernetes resources
+        run: |
+          cd k8s
+          kubectl apply -f .
