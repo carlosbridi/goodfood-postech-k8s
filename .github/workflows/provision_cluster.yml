@@ -43,7 +43,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: git@github.com:carlosbridi/goodfood-postech.git
+          repository: git@github.com:carlosbridi/goodfood-postech.git
 
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
