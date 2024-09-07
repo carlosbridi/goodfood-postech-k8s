@@ -8,50 +8,29 @@ on:
         default: 'terraform-githubactions'
         type: string
 jobs:
-  # provision-k8s:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: '14'
-  #     - name: Configure AWS credentials
-  #       uses: aws-actions/configure-aws-credentials@v1
-  #       with:
-  #         aws-access-key-id: '${{ secrets.AWS_USER_AK }}'
-  #         aws-secret-access-key: '${{ secrets.AWS_USER_SK }}'
-  #         aws-region: us-east-1
-  #     - name: Setup Terraform
-  #       uses: hashicorp/setup-terraform@v2
-  #       with:
-  #         terraform_wrapper: false
-  #     - name: Terraform Apply
-  #       id:   apply
-  #       env:
-  #         TF_VAR_k8s_name:  "${{ github.event.inputs.ec2-k8s-name }}"
-  #       run: |
-  #         terraform init
-  #         terraform validate
-  #         terraform plan 
-  #         terraform apply -auto-approve
-
-  kubectl:
-    # needs: provision-k8s
+  provision-k8s:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          repository: carlosbridi/goodfood-postech
-          ref: main
-
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
+          node-version: '14'
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          version: 'latest'
-
-      - name: Install Kubernetes resources
+          aws-access-key-id: '${{ secrets.AWS_USER_AK }}'
+          aws-secret-access-key: '${{ secrets.AWS_USER_SK }}'
+          aws-region: us-east-1
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+      - name: Terraform Apply
+        id:   apply
+        env:
+          TF_VAR_k8s_name:  "${{ github.event.inputs.ec2-k8s-name }}"
         run: |
-          cd k8s
-          kubectl apply -f .
+          terraform init
+          terraform validate
+          terraform plan 
+          terraform apply -auto-approve
