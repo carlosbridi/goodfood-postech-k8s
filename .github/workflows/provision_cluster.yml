@@ -1,12 +1,9 @@
 name: Provision Cluster
 on:
-  workflow_dispatch:
-    inputs:
-      k8s-name:
-        description: Goodfood-Postech Cluser
-        required: true
-        default: 'terraform-githubactions'
-        type: string
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
 jobs:
   provision-k8s:
     runs-on: ubuntu-latest
